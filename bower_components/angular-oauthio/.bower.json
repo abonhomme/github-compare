@@ -1,0 +1,19 @@
+{
+  "name": "angular-oauth.io",
+  "dependencies": {},
+  "devDependencies": {
+    "angular": "latest",
+    "angular-mocks": "latest",
+    "jquery": "latest"
+  },
+  "homepage": "https://github.com/matteosuppo/angular-oauthio",
+  "_release": "0acacc4529",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "0acacc452927e092ab0235565845572f61272049"
+  },
+  "_source": "git://github.com/matteosuppo/angular-oauthio.git",
+  "_target": "*",
+  "_originalSource": "angular-oauthio"
+}
