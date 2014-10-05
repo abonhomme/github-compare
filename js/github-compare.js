@@ -1,4 +1,113 @@
-angular.module('GithubServices', ['oauth.io', 'uri-template'])
+angular.module('App', ['ngRoute', 'GithubServices', 'Compare', 'angularMoment', 'mm.foundation'], function ($routeProvider) {
+  "use strict";
+    $routeProvider
+      .when('/', {templateUrl: 'app/app.html'})
+      .otherwise({redirectTo: '/'})
+    ;
+  })
+  .service('compareRepositories', function ($location) {
+    return function (repoUrl1, repoUrl2) {
+      var repo1 = repoUrl1.replace('https://github.com/', '');
+      var repo2 = repoUrl2.replace('https://github.com/', '');
+      $location.url('/compare/'+repo1+'/'+repo2);
+    };
+  })
+  .controller('App_githubModalCtrl', function ($scope, OAuth) {
+    $scope.signin = function () {
+      OAuth.popup('github');
+    };
+  })
+  .controller('App_searchCtrl', function ($scope, $location, compareRepositories) {
+    $scope.form = {
+      repo1: '',
+      repo2: ''
+    };
+
+    $scope.compare = function (form) {
+      compareRepositories(form.repo1, form.repo2);
+    };
+  })
+  .run(function ($modal, ratelimitDispatcher) {
+    ratelimitDispatcher.addListener(function () {
+      $modal.open({
+        templateUrl: 'github-modal-content.html',
+        controller: 'App_githubModalCtrl'
+      });
+    });
+  })
+;
+;angular.module('CompareControllers', [])
+  .controller('CompareControllers_compareCtrl', function ($scope, $location, $routeParams, githubApiClient, compareRepositories) {
+    "use strict";
+    $scope.form = {
+      repo1: {
+        url: ''
+      },
+      repo2: {
+        url: ''
+      },
+      submit: function () {
+        compareRepositories(this.repo1.url, this.repo2.url);
+      }
+    };
+    githubApiClient
+      .getRepositoryStats($routeParams.owner1, $routeParams.repo1)
+      .then(function (repo) {
+        $scope.repo1 = repo;
+        $scope.form.repo1.url = repo.html_url;
+      }, function () {
+
+      }, function (partialRepo) {
+        $scope.repo1 = partialRepo;
+      })
+    ;
+    githubApiClient
+      .getRepositoryStats($routeParams.owner2, $routeParams.repo2)
+      .then(function (repo) {
+        $scope.repo2 = repo;
+        $scope.form.repo2.url = repo.html_url;
+      }, function () {
+
+      }, function (partialRepo) {
+        $scope.repo2 = partialRepo;
+      })
+    ;
+  })
+;
+;angular.module('CompareDirectives', [])
+  .directive('languageList', function () {
+    return {
+      restrict: 'E',
+      templateUrl: 'app/compare/fragment/language-list.tpl.html',
+      scope: {
+        data: '='
+      },
+      link: function (scope, elem, attrs) {
+        scope.$watch('data', function (data) {
+          var totalLines = 0;
+          angular.forEach(data, function (value) {
+            totalLines += value;
+          });
+          scope.languages = [];
+          angular.forEach(data, function (value, key) {
+            scope.languages.push({
+              name: key,
+              lines: value,
+              percent: Math.floor(100*value/totalLines)
+            });
+          });
+          scope.languages.sort(function (a, b) {
+            return b.lines - a.lines;
+          });
+        });
+      }
+    };
+  })
+;
+;angular.module('Compare', ['ngRoute', 'CompareControllers', 'CompareDirectives'], function ($routeProvider) {
+  "use strict";
+  $routeProvider.when('/compare/:owner1/:repo1/:owner2/:repo2', {templateUrl: 'app/compare/compare.html'});
+});;angular.module('GithubServices', ['oauth.io', 'uri-template'])
   .config(function (OAuthProvider, $httpProvider) {
     OAuthProvider.setPublicKey('CKyIhlzMQQ3uA3hHEr2sSPmQl8Q');
     OAuthProvider.setHandler('github', function (OAuthData) {
