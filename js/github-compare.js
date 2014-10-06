@@ -39,37 +39,40 @@ angular.module('App', ['ngRoute', 'GithubServices', 'Compare', 'angularMoment', 
 ;angular.module('CompareControllers', [])
   .controller('CompareControllers_compareCtrl', function ($scope, $location, $routeParams, githubApiClient, compareRepositories) {
     "use strict";
+    $scope.repos = [];
     $scope.form = {
-      repo1: {
-        url: ''
-      },
-      repo2: {
-        url: ''
-      },
+      repos: [
+        {
+          url: ''
+        },
+        {
+          url: ''
+        }
+      ],
       submit: function () {
-        compareRepositories(this.repo1.url, this.repo2.url);
+        compareRepositories(this.repos[0].url, this.repos[1].url);
       }
     };
     githubApiClient
       .getRepositoryStats($routeParams.owner1, $routeParams.repo1)
       .then(function (repo) {
-        $scope.repo1 = repo;
-        $scope.form.repo1.url = repo.html_url;
+        $scope.repos[0] = repo;
+        $scope.form.repos[0].url = repo.html_url;
       }, function () {
 
       }, function (partialRepo) {
-        $scope.repo1 = partialRepo;
+        $scope.repos[0] = partialRepo;
       })
     ;
     githubApiClient
       .getRepositoryStats($routeParams.owner2, $routeParams.repo2)
       .then(function (repo) {
-        $scope.repo2 = repo;
-        $scope.form.repo2.url = repo.html_url;
+        $scope.repos[1] = repo;
+        $scope.form.repos[1].url = repo.html_url;
       }, function () {
 
       }, function (partialRepo) {
-        $scope.repo2 = partialRepo;
+        $scope.repos[1] = partialRepo;
       })
     ;
   })
@@ -83,6 +86,11 @@ angular.module('App', ['ngRoute', 'GithubServices', 'Compare', 'angularMoment', 
         data: '='
       },
       link: function (scope, elem, attrs) {
+        scope.greaterThan = function (prop, val) {
+          return function (item) {
+            return item[prop] > val;
+          };
+        };
         scope.$watch('data', function (data) {
           var totalLines = 0;
           angular.forEach(data, function (value) {
@@ -93,7 +101,7 @@ angular.module('App', ['ngRoute', 'GithubServices', 'Compare', 'angularMoment', 
             scope.languages.push({
               name: key,
               lines: value,
-              percent: Math.floor(100*value/totalLines)
+              percent: Math.round(100*value/totalLines)
             });
           });
           scope.languages.sort(function (a, b) {
