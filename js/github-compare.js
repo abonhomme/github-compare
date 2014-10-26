@@ -35,12 +35,16 @@ angular.module('App', ['ngRoute', 'GithubServices', 'Compare', 'angularMoment', 
       }
     };
   })
-  .run(function ($modal, ratelimitDispatcher) {
-    ratelimitDispatcher.addListener(function () {
-      $modal.open({
-        templateUrl: 'github-modal-content.html',
-        controller: 'App_githubModalCtrl'
-      });
+  .run(function ($modal, $route, ratelimitDispatcher) {
+    ratelimitDispatcher.addListener(function (event) {
+      if (event.status === 403) {
+        $modal.open({
+          templateUrl: 'github-modal-content.html',
+          controller: 'App_githubModalCtrl'
+        });
+      } else {
+        window.location.reload(true);
+      }
     });
   })
 ;
@@ -162,8 +166,9 @@ angular.module('App', ['ngRoute', 'GithubServices', 'Compare', 'angularMoment', 
 });;angular.module('GithubServices', ['oauth.io', 'uri-template'])
   .config(function (OAuthProvider, $httpProvider) {
     OAuthProvider.setPublicKey('CKyIhlzMQQ3uA3hHEr2sSPmQl8Q');
-    OAuthProvider.setHandler('github', function (OAuthData) {
+    OAuthProvider.setHandler('github', function (OAuthData, ratelimitDispatcher) {
       window.localStorage.setItem('accessToken', OAuthData.result.access_token);
+      ratelimitDispatcher.dispatch(OAuthData);
     });
     $httpProvider.interceptors.push(function ($q, ratelimitDispatcher, paginatedDispatcher) {
       return {
