@@ -1,0 +1,45 @@
+/*
+Error: Invalid US-ASCII character "\xEF"
+        on line 27 of sprockets-octicons.scss
+
+22:   -ms-user-select: none;
+23:   user-select: none;
+24: }
+25: .mega-octicon { font-size: 32px; }
+26: 
+27: .octicon-alert:before { content: '\f02d'} /*  *\/
+28: .octicon-alignment-align:before { content: '\f08a'} /*  *\/
+29: .octicon-alignment-aligned-to:before { content: '\f08e'} /*  *\/
+30: .octicon-alignment-unalign:before { content: '\f08b'} /*  *\/
+31: .octicon-arrow-down:before { content: '\f03f'} /*  *\/
+32: .octicon-arrow-left:before { content: '\f040'} /*  *\/
+
+Backtrace:
+sprockets-octicons.scss:27
+/home/brian/.gem/ruby/2.1.0/gems/sass-3.4.5/lib/sass/util.rb:1323:in `rescue in block in find_encoding_error'
+/home/brian/.gem/ruby/2.1.0/gems/sass-3.4.5/lib/sass/util.rb:1320:in `block in find_encoding_error'
+/home/brian/.gem/ruby/2.1.0/gems/sass-3.4.5/lib/sass/util.rb:1319:in `each'
+/home/brian/.gem/ruby/2.1.0/gems/sass-3.4.5/lib/sass/util.rb:1319:in `each_with_index'
+/home/brian/.gem/ruby/2.1.0/gems/sass-3.4.5/lib/sass/util.rb:1319:in `find_encoding_error'
+/home/brian/.gem/ruby/2.1.0/gems/sass-3.4.5/lib/sass/util.rb:896:in `check_sass_encoding'
+/home/brian/.gem/ruby/2.1.0/gems/sass-3.4.5/lib/sass/engine.rb:423:in `check_encoding!'
+/home/brian/.gem/ruby/2.1.0/gems/sass-3.4.5/lib/sass/engine.rb:379:in `_to_tree'
+/home/brian/.gem/ruby/2.1.0/gems/sass-3.4.5/lib/sass/engine.rb:368:in `_render_with_sourcemap'
+/home/brian/.gem/ruby/2.1.0/gems/sass-3.4.5/lib/sass/engine.rb:285:in `render_with_sourcemap'
+/home/brian/.gem/ruby/2.1.0/gems/sass-3.4.5/lib/sass/plugin/compiler.rb:489:in `update_stylesheet'
+/home/brian/.gem/ruby/2.1.0/gems/sass-3.4.5/lib/sass/plugin/compiler.rb:215:in `block in update_stylesheets'
+/home/brian/.gem/ruby/2.1.0/gems/sass-3.4.5/lib/sass/plugin/compiler.rb:209:in `each'
+/home/brian/.gem/ruby/2.1.0/gems/sass-3.4.5/lib/sass/plugin/compiler.rb:209:in `update_stylesheets'
+/home/brian/.gem/ruby/2.1.0/gems/sass-3.4.5/lib/sass/plugin.rb:82:in `update_stylesheets'
+/home/brian/.gem/ruby/2.1.0/gems/sass-3.4.5/lib/sass/exec/sass_scss.rb:350:in `watch_or_update'
+/home/brian/.gem/ruby/2.1.0/gems/sass-3.4.5/lib/sass/exec/sass_scss.rb:50:in `process_result'
+/home/brian/.gem/ruby/2.1.0/gems/sass-3.4.5/lib/sass/exec/base.rb:52:in `parse'
+/home/brian/.gem/ruby/2.1.0/gems/sass-3.4.5/lib/sass/exec/base.rb:19:in `parse!'
+/home/brian/.gem/ruby/2.1.0/gems/sass-3.4.5/bin/sass:13:in `<top (required)>'
+/home/brian/.gem/ruby/2.1.0/bin/sass:23:in `load'
+/home/brian/.gem/ruby/2.1.0/bin/sass:23:in `<main>'
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: "Error: Invalid US-ASCII character \"\xEF\"\A         on line 27 of sprockets-octicons.scss\A \A 22:   -ms-user-select: none;\A 23:   user-select: none;\A 24: }\A 25: .mega-octicon { font-size: 32px; }\A 26: \A 27: .octicon-alert:before { content: '\f02d'} /*  */\A 28: .octicon-alignment-align:before { content: '\f08a'} /*  */\A 29: .octicon-alignment-aligned-to:before { content: '\f08e'} /*  */\A 30: .octicon-alignment-unalign:before { content: '\f08b'} /*  */\A 31: .octicon-arrow-down:before { content: '\f03f'} /*  */\A 32: .octicon-arrow-left:before { content: '\f040'} /*  */"; }

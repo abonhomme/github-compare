@@ -35,7 +35,6 @@ angular.module('App', ['ngRoute', 'GithubServices', 'Compare', 'angularMoment', 
       if (form.$dirty === false) {
         compareRepositories(defaults[0], defaults[1]);
       } else {
-        console.log(defaults[0]);
         compareRepositories(form.repo1 || defaults[0], form.repo2 || defaults[1]);
       }
     };
@@ -396,6 +395,8 @@ angular.module('App', ['ngRoute', 'GithubServices', 'Compare', 'angularMoment', 
             expand(stats.contributors_url, 'contributors'),
             expand(stats.languages_url, 'languages'),
             expand(stats.tags_url, 'tags'),
+            expand(baseUrl+"/repos/"+owner+"/"+repo+"/pulls?state=open", 'open_pulls'),
+            expand(baseUrl+"/repos/"+owner+"/"+repo+"/pulls?state=closed", 'closed_pulls'),
             expand(UriTemplate.parse(stats.releases_url).expand({"id": ''}), 'releases'),
             expand(UriTemplate.parse(stats.commits_url).expand({"id": ''}), 'commits'),
           ]);
